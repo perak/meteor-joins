@@ -5,11 +5,12 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
+//	api.use(["mongo", "underscore"]);
+
 	if(api.versionsFrom) {
 		api.versionsFrom('METEOR@0.9.0');
 	}
 
-	api.use(["mongo", "underscore"]);
 
 	api.add_files('joins.js', ["client", "server"]);
 });
