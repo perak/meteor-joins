@@ -1,6 +1,6 @@
 Package.describe({
 	summary: "Collection joins for Meteor",
-	version: "1.0.0",
+	version: "1.0.1",
 	git: "https://github.com/perak/meteor-joins.git"
 });
 
@@ -12,5 +12,5 @@ Package.onUse(function (api) {
 	}
 
 
-	api.add_files('joins.js', ["client", "server"]);
+	api.add_files('lib/joins.js', ["client", "server"]);
 });

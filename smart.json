@@ -3,7 +3,7 @@
 	"description": "Collection joins for Meteor",
 	"homepage": "https://github.com/perak/meteor-joins",
 	"author": "Petar Korponaic",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"git": "https://github.com/perak/meteor-joins.git",
 	"packages": {}
 }

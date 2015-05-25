@@ -70,4 +70,29 @@ Collection.join
 `fieldList` array of field names we want to get from foreign collection (in our example array with one field `["name"]`)
 
 
+Collection.publishJoinedCursors(cursor)
+---------------------------------------
+
+For use in publications. Instead of simple returning result from collection, we want to return cursors with data from joined collections too.
+This function will query joined collections and return array of cursors.
+
+`Collection.publishJoinedCursors`
+
+### Arguments
+
+`cursor` cursor that you normally return from publish function
+
+Example **publish** function:
+
+```
+Meteor.publish("employees", function() {
+
+	var cursor = Employees.find(); // do what you normally do here
+
+	return Employees.publishJoinedCursors(cursor);
+});
+```
+With queried employees, cursor with companies filtered by employee.companyId will be returned too.
+
+
 That's it :)
