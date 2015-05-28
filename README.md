@@ -1,7 +1,8 @@
 Collection joins
 ================
 
-With this package included, you can define joins. `Collection.find` and `Collection.findOne` will return documents expanded with docs from joined collections. 
+With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections.
+This package is used by [Meteor Kitchen](http://www.meteorkitchen.com) - code generator for Meteor.
 
 Example
 -------
@@ -57,8 +58,11 @@ You'l get:
 }
 ```
 
-Collection.join
----------------
+Functions
+=========
+
+Collection.join(collection, foreignKey, containerField, fieldList)
+------------------------------------------------------------------
 
 `Collection.join(collection, foreignKey, containerField, fieldList)`
 
@@ -69,14 +73,16 @@ Collection.join
 `containerField` field name where to store foreign document (in our example: `"company"`)
 `fieldList` array of field names we want to get from foreign collection (in our example array with one field `["name"]`)
 
+Use this function in scope visible both to client and server.
+
 
 Collection.publishJoinedCursors(cursor)
 ---------------------------------------
 
-For use in publications. Instead of simple returning result from collection, we want to return cursors with data from joined collections too.
-This function will query joined collections and return array of cursors.
+For use server side in publications: instead of simply returning result from collection, we want to return cursors with data from joined collections too.
+This function will query joined collections and will return array of cursors.
 
-`Collection.publishJoinedCursors`
+`Collection.publishJoinedCursors(cursor)`
 
 ### Arguments
 
@@ -89,7 +95,7 @@ Meteor.publish("employees", function() {
 
 	var cursor = Employees.find(); // do what you normally do here
 
-	return Employees.publishJoinedCursors(cursor);
+	return Employees.publishJoinedCursors(cursor); // instead of simply returning resulting cursor
 });
 ```
 With queried employees, cursor with companies filtered by employee.companyId will be returned too.
