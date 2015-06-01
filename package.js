@@ -1,6 +1,6 @@
 Package.describe({
 	summary: "Collection joins for Meteor",
-	version: "1.0.3",
+	version: "1.0.4",
 	git: "https://github.com/perak/meteor-joins.git"
 });
 
