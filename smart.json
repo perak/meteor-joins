@@ -1,6 +1,6 @@
 {
 	"name": "joins",
-	"description": "Collection joins for Meteor",
+	"description": "Generic joins for Meteor",
 	"homepage": "https://github.com/perak/meteor-joins",
 	"author": "Petar Korponaic",
 	"version": "1.0.5",
