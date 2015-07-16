@@ -1,11 +1,12 @@
-Collection joins
-================
+Generic joins
+=============
 
-With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections.
+With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections. You can also create "generic join" - join one collection with multiple others using the same foreign key.
+
 This package is used by [Meteor Kitchen](http://www.meteorkitchen.com) - code generator for Meteor.
 
-Example
--------
+Example 1 - simple join
+-----------------------
 
 We have two collections: Companies & Employees
 
@@ -39,6 +40,12 @@ Let's **define join** (in both server & client scope)
 Employees.join(Companies, "companyId", "company", ["name"]);
 ```
 
+*Or you can pass collection name:*
+
+```
+Employees.join("Companies", "companyId", "company", ["name"]);
+```
+
 Now, if you do:
 
 ```
@@ -58,26 +65,156 @@ You'l get:
 }
 ```
 
-Functions
-=========
+Example 2 - generic join
+------------------------
 
-Collection.join(collection, foreignKey, containerField, fieldList)
-------------------------------------------------------------------
+Let's say we have four collections:
+
+```
+var Companies = new Mongo.Collection("companies");
+var Employees = new Mongo.Collection("employees");
+var Tags = new Mongo.Collection("tags");
+var TaggedDocuments = new Mongo.Collection("tagged_documents");
+```
+
+in "Tags" collection we have list of possible tags:
+
+```
+{
+	_id: "wrWrXDqWwPrXCWsgu",
+	name: "Awesome!"
+}
+```
+
+We can tag documents from both "Companies" and "Employees". When document is tagged we are storing three values into "TaggedDocuments" collection:
+
+```
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	collectionName: "employees",
+	docId: "dySSKA25pCtKjo5uA"
+},
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	collectionName: "companies",
+	docId: "CQKDzmqmQXGhsC6PG"
+}
+```
+
+- `tagId` stores tag _id from "Tags" collection
+- `collectionName` stores name of collection where tagged document belongs to
+- `docId` stores _id of tagged document
+
+**collectionName** can be any existing collection.
+
+Let's define generic join:
+
+```
+TaggedDocuments.genericJoin("collectionName", "docId", "document");
+```
+
+Now, if you do:
+
+```
+TaggedDocuments.find({ tagId: "wrWrXDqWwPrXCWsgu" });
+```
+
+You'l get something like this:
+
+```
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	collectionName: "employees",
+	docId: "dySSKA25pCtKjo5uA",
+	document: {
+		name: "Jimi Hendrix",
+		companyId: "CQKDzmqmQXGhsC6PG"
+	}
+},
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	collectionName: "companies",
+	docId: "CQKDzmqmQXGhsC6PG",
+	document: {
+		name: "Acme"
+	}
+}
+```
+
+Also, you can define simple join to "Tags" collection too:
+
+```
+TaggedDocuments.join(Tags, "tagId", "tag", []);
+TaggedDocuments.genericJoin("collectionName", "docId", "document");
+```
+
+And now if you do:
+
+```
+TaggedDocuments.find({ tagId: "wrWrXDqWwPrXCWsgu" });
+```
+
+You'l get:
+
+```
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	tag: {
+		name: "Awesome!"
+	},
+	collectionName: "employees",
+	docId: "dySSKA25pCtKjo5uA",
+	document: {
+		name: "Jimi Hendrix",
+		companyId: "CQKDzmqmQXGhsC6PG"
+	}
+},
+{
+	tagId: "wrWrXDqWwPrXCWsgu",
+	tag: {
+		name: "Awesome!"
+	},
+	collectionName: "companies",
+	docId: "CQKDzmqmQXGhsC6PG",
+	document: {
+		name: "Acme"
+	}
+}
+```
+
+voilà - we have generic N:M join!
+
+
+Function reference
+==================
+
+Collection.join
+---------------
 
 `Collection.join(collection, foreignKey, containerField, fieldList)`
 
 ### Arguments:
 
-`collection` Mongo.Collection object to join
-`foreignKey` field name where foreign document _id is stored (in our example: `"companyId"`)
-`containerField` field name where to store foreign document (in our example: `"company"`)
-`fieldList` array of field names we want to get from foreign collection (in our example array with one field `["name"]`)
+- `collection` Mongo.Collection object (or collection name) to join
+- `foreignKey` field name where foreign document _id is stored (in our example: `"companyId"`)
+- `containerField` field name where to store foreign document (in our example: `"company"`)
+- `fieldList` array of field names we want to get from foreign collection (in our example array with one field `["name"]`)
 
 Use this function in scope visible both to client and server.
 
 
-Collection.publishJoinedCursors(cursor)
----------------------------------------
+Collection.genericJoin
+----------------------
+
+`Collection.genericJoin(collectionNameField, foreignKey, containerField)`
+
+- `collectionNameField` field name in which foreign collection name is stored
+- `foreignKey` field name where foreign document _id is stored
+- `containerField` field name where to store foreign document
+
+
+Collection.publishJoinedCursors
+-------------------------------
 
 For use server side in publications: instead of simply returning result from collection, we want to return cursors with data from joined collections too.
 This function will query joined collections and will return array of cursors.
@@ -86,7 +223,7 @@ This function will query joined collections and will return array of cursors.
 
 ### Arguments
 
-`cursor` cursor that you normally return from publish function
+- `cursor` cursor that you normally return from publish function
 
 Example **publish** function:
 
@@ -99,6 +236,22 @@ Meteor.publish("employees", function() {
 });
 ```
 With queried employees, cursor with companies filtered by employee.companyId will be returned too.
+
+
+Version history
+===============
+
+1.0.5
+-----
+
+- Now you can pass collection name as first argument to `join` function.
+
+- Added generic joins.
+
+
+Credits
+=======
+
 
 
 That's it :)
