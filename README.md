@@ -91,12 +91,12 @@ We can tag documents from both "Companies" and "Employees". When document is tag
 ```
 {
 	tagId: "wrWrXDqWwPrXCWsgu",
-	collectionName: "employees",
+	collectionName: "Employees",
 	docId: "dySSKA25pCtKjo5uA"
 },
 {
 	tagId: "wrWrXDqWwPrXCWsgu",
-	collectionName: "companies",
+	collectionName: "Companies",
 	docId: "CQKDzmqmQXGhsC6PG"
 }
 ```
@@ -124,7 +124,7 @@ You'l get something like this:
 ```
 {
 	tagId: "wrWrXDqWwPrXCWsgu",
-	collectionName: "employees",
+	collectionName: "Employees",
 	docId: "dySSKA25pCtKjo5uA",
 	document: {
 		name: "Jimi Hendrix",
@@ -133,7 +133,7 @@ You'l get something like this:
 },
 {
 	tagId: "wrWrXDqWwPrXCWsgu",
-	collectionName: "companies",
+	collectionName: "Companies",
 	docId: "CQKDzmqmQXGhsC6PG",
 	document: {
 		name: "Acme"
@@ -162,7 +162,7 @@ You'l get:
 	tag: {
 		name: "Awesome!"
 	},
-	collectionName: "employees",
+	collectionName: "Employees",
 	docId: "dySSKA25pCtKjo5uA",
 	document: {
 		name: "Jimi Hendrix",
@@ -174,7 +174,7 @@ You'l get:
 	tag: {
 		name: "Awesome!"
 	},
-	collectionName: "companies",
+	collectionName: "Companies",
 	docId: "CQKDzmqmQXGhsC6PG",
 	document: {
 		name: "Acme"
@@ -208,9 +208,9 @@ Collection.genericJoin
 
 `Collection.genericJoin(collectionNameField, foreignKey, containerField)`
 
-- `collectionNameField` field name in which foreign collection name is stored
+- `collectionNameField` field name (from this collection) in which foreign collection name is stored
 - `foreignKey` field name where foreign document _id is stored
-- `containerField` field name where to store foreign document
+- `containerField` field name where to store joined foreign document
 
 
 Collection.publishJoinedCursors
@@ -241,6 +241,12 @@ With queried employees, cursor with companies filtered by employee.companyId wil
 Version history
 ===============
 
+1.0.6
+-----
+
+- Updated this README.md
+
+
 1.0.5
 -----
 
@@ -252,6 +258,9 @@ Version history
 Credits
 =======
 
+Thanks to [Robert Moggach](https://github.com/robmoggach).
 
+
+---
 
 That's it :)
