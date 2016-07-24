@@ -1,5 +1,5 @@
-Generic joins
-=============
+Generic collection joins for Meteor
+===================================
 
 With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections. You can also create "generic join" - join one collection with multiple others using the same foreign key.
 
@@ -240,6 +240,11 @@ With queried employees, cursor with companies filtered by employee.companyId wil
 
 Version history
 ===============
+
+1.0.7
+-----
+
+- Fixed error: "Publish function returned multiple cursors" when collection joins with the another collection multiple times
 
 1.0.6
 -----
