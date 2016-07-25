@@ -241,6 +241,11 @@ With queried employees, cursor with companies filtered by employee.companyId wil
 Version history
 ===============
 
+1.0.8
+-----
+
+- Foreign key name now can be in "dot" notation: `a.b.c`
+
 1.0.7
 -----
 
