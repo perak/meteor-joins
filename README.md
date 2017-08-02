@@ -3,8 +3,6 @@ Generic collection joins for Meteor
 
 With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections. You can also create "generic join" - join one collection with multiple others using the same foreign key.
 
-Join is reactive if you pass option `reactiveJoin: true` to find() and findOne() (thanks to [Per Bernhardsson](https://github.com/Lavan))
-
 This package is used by [Meteor Kitchen](http://www.meteorkitchen.com) - code generator for Meteor.
 
 Example 1 - simple join
@@ -48,6 +46,17 @@ Employees.join(Companies, "companyId", "company", ["name"]);
 Employees.join("Companies", "companyId", "company", ["name"]);
 ```
 
+And at server in publication, instead simply returning cursor, return with Collection.publishJoinedCursors method:
+
+```
+Meteor.publish("employees", function() {
+
+	var cursor = Employees.find(); // do what you normally do here
+
+	return Employees.publishJoinedCursors(cursor); // instead of simply returning resulting cursor
+});
+```
+
 Now, if you do:
 
 ```
@@ -67,10 +76,16 @@ You'l get:
 }
 ```
 
-Join will be reactive if you pass `reactiveJoin: true` as option to find (or findOne)
+Join will be reactive if you pass `reactive: true` as option to publishJoinedCursors and pass `this` (publication) as third argument:
 
 ```
-Employees.find({}, { reactiveJoin: true });
+Meteor.publish("employees", function() {
+
+	var cursor = Employees.find();
+
+	return Employees.publishJoinedCursors(cursor, { reactive: true }, this);
+
+});
 ```
 
 
@@ -228,11 +243,13 @@ Collection.publishJoinedCursors
 For use server side in publications: instead of simply returning result from collection, we want to return cursors with data from joined collections too.
 This function will query joined collections and will return array of cursors.
 
-`Collection.publishJoinedCursors(cursor)`
+`Collection.publishJoinedCursors(cursor, options, this)`
 
 ### Arguments
 
 - `cursor` cursor that you normally return from publish function
+- `options` options object, currently only one option exists: `{ reactive: true }`
+- `this` caller (publication)
 
 Example **publish** function:
 
@@ -246,9 +263,30 @@ Meteor.publish("employees", function() {
 ```
 With queried employees, cursor with companies filtered by employee.companyId will be returned too.
 
+If you want it reactive:
+
+```
+Meteor.publish("employees", function() {
+
+	var cursor = Employees.find(); // do what you normally do here
+
+	return Employees.publishJoinedCursors(cursor, { reactive: true }, this);
+});
+
 
 Version history
 ===============
+
+1.1.0
+-----
+
+Join is now reactive (using super ugly & dirty tricks)
+
+
+1.0.9
+-----
+
+Unsuccessfully tried to add reactivity (update details when master document changes)
 
 1.0.8
 -----
