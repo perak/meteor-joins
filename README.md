@@ -3,6 +3,8 @@ Generic collection joins for Meteor
 
 With this package included, you can define joins between collections. `Collection.find` and `Collection.findOne` will return data expanded with docs from joined collections. You can also create "generic join" - join one collection with multiple others using the same foreign key.
 
+Join is reactive if you pass option `reactiveJoin: true` to find() and findOne() (thanks to [Per Bernhardsson](https://github.com/Lavan))
+
 This package is used by [Meteor Kitchen](http://www.meteorkitchen.com) - code generator for Meteor.
 
 Example 1 - simple join
@@ -64,6 +66,13 @@ You'l get:
 	}
 }
 ```
+
+Join will be reactive if you pass `reactiveJoin: true` as option to find (or findOne)
+
+```
+Employees.find({}, { reactiveJoin: true });
+```
+
 
 Example 2 - generic join
 ------------------------
