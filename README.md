@@ -272,10 +272,16 @@ Meteor.publish("employees", function() {
 
 	return Employees.publishJoinedCursors(cursor, { reactive: true }, this);
 });
-
+```
 
 Version history
 ===============
+
+1.1.1
+-----
+
+Updated README.md
+
 
 1.1.0
 -----
