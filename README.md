@@ -76,14 +76,14 @@ You'l get:
 }
 ```
 
-Join will be reactive if you pass `reactive: true` as option to publishJoinedCursors and pass `this` (publication) as third argument:
+Join will be reactive if you pass `reactive: true` as option to publishJoinedCursors:
 
 ```
 Meteor.publish("employees", function() {
 
 	var cursor = Employees.find();
 
-	return Employees.publishJoinedCursors(cursor, { reactive: true }, this);
+	return Employees.publishJoinedCursors(cursor, { reactive: true });
 
 });
 ```
@@ -243,13 +243,12 @@ Collection.publishJoinedCursors
 For use server side in publications: instead of simply returning result from collection, we want to return cursors with data from joined collections too.
 This function will query joined collections and will return array of cursors.
 
-`Collection.publishJoinedCursors(cursor, options, this)`
+`Collection.publishJoinedCursors(cursor, options)`
 
 ### Arguments
 
 - `cursor` cursor that you normally return from publish function
 - `options` options object, currently only one option exists: `{ reactive: true }`
-- `this` caller (publication)
 
 Example **publish** function:
 
@@ -270,12 +269,30 @@ Meteor.publish("employees", function() {
 
 	var cursor = Employees.find(); // do what you normally do here
 
-	return Employees.publishJoinedCursors(cursor, { reactive: true }, this);
+	return Employees.publishJoinedCursors(cursor, { reactive: true });
 });
 ```
 
 Version history
 ===============
+
+1.1.4
+-----
+
+Updated README.md
+
+
+1.1.3
+-----
+
+Fixed bugs related to reactive joins
+
+
+1.1.2
+-----
+
+Fixed bugs related to reactive joins
+
 
 1.1.1
 -----
