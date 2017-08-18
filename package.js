@@ -1,7 +1,7 @@
 Package.describe({
 	name: "perak:joins",
 	summary: "Generic collection joins for Meteor",
-	version: "1.1.5",
+	version: "1.1.6",
 	git: "https://github.com/perak/meteor-joins.git"
 });
 
