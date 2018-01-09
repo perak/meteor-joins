@@ -125,9 +125,9 @@ We can tag documents from both "Companies" and "Employees". When document is tag
 }
 ```
 
-- `tagId` stores tag _id from "Tags" collection
+- `tagId` stores tag id from "Tags" collection
 - `collectionName` stores name of collection where tagged document belongs to
-- `docId` stores _id of tagged document
+- `docId` stores id of tagged document
 
 **collectionName** can be any existing collection.
 
@@ -274,8 +274,48 @@ Meteor.publish("employees", function() {
 });
 ```
 
+
+Using `reactive: true` and `auditargument-checks` package
+---------------------------------------------------------
+
+Your publication will be called with one extra argument (internally used by package). That's OK unless you are using `audit-argument-checks` which forces you to `check()` all arguments passed to publication. In that case, you need to check that extra argument:
+
+```
+Meteor.publish("publicationName", function(arg1, extraArgument) {
+	check(arg1, ...); // check your arguments as you normally do ...
+	check(extraArgument, Match.Any); // ... but don't forget to check extraArgument
+});
+
+```
+
+
+
 Version history
 ===============
+
+1.1.9
+-----
+
+Issue related to `audit-argument-checks` package is added to README.md
+
+
+1.1.8
+-----
+
+Fixed bug with Random
+
+
+1.1.7
+-----
+
+If joined doc is not found, set container to empty object instead null
+
+
+1.1.6
+-----
+
+Improved reactive joins
+
 
 1.1.5
 -----
